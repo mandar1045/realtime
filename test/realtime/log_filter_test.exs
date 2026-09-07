@@ -87,4 +87,3 @@ defmodule Realtime.LogFilterTest do
     }
   end
 end
-
