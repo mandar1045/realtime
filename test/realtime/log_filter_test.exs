@@ -3,6 +3,9 @@ defmodule Realtime.LogFilterTest do
 
   alias Realtime.LogFilter
 
+  @ranch_format ~c"Ranch listener ~p had connection process started with ~p:start_link/3 at ~p exit with reason: ~0p~n"
+  @ranch_format_binary "Ranch listener ~p had connection process started with ~p:start_link/3 at ~p exit with reason: ~0p~n"
+
   describe "filter/2 - gen_statem crash reports" do
     test "stops DBConnection.ConnectionError crashes" do
       event = gen_statem_event(%DBConnection.ConnectionError{message: "tcp connect: connection refused"})
@@ -73,10 +76,7 @@ defmodule Realtime.LogFilterTest do
     }
   end
 
-  @ranch_format ~c"Ranch listener ~p had connection process started with ~p:start_link/3 at ~p exit with reason: ~0p~n"
-  @ranch_format_binary "Ranch listener ~p had connection process started with ~p:start_link/3 at ~p exit with reason: ~0p~n"
-
-  defp ranch_event(ref, protocol, pid, reason, format \\ @ranch_format) do
+  defp ranch_event(ref, protocol, pid, reason, format) do
     %{msg: {:format, format, [ref, protocol, pid, reason]}, meta: %{pid: self()}}
   end
 
@@ -87,3 +87,4 @@ defmodule Realtime.LogFilterTest do
     }
   end
 end
+
